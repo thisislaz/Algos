@@ -29,7 +29,7 @@ const expected4 = [
 ];
 
 // Bonus:
-const nums5 = [-2, -5, -3, -6, -7, -0, -0, -23, -12]; 
+const nums5 = [-2, -5, -3, -6, -7, -0, -0, -23, -12];
 const sum5 = -16;
 const expected5 = [
   [-2, -5, -3, -6],
@@ -50,30 +50,46 @@ const expected5 = [
  *    only.
  */
 function findConsqSums(nums, targetSum) {
-    //make varibles
-    let allArrs = []
-//outside for loop to go over array
-    for(let i = 0; i<nums.length; i++){
-        let counterArr = [];
-        let sum = 0;
-        for(let j = i; j<nums.length;j++){
-            sum += nums[j]
-            counterArr.push(nums[j])
-            if(sum == targetSum){
-                allArrs.push(counterArr)
-                for(let k = j+1 ; k < nums.length; k++){
-                    if(nums[k] == 0){
-                        counterArr.push(nums[k])
-                        allArrs.push(counterArr)
-                    }
-                }
-                break;
-            } else if ( sum > targetSum){
-                break;
-            }
-        }
+  let left = 0;
+  let right = 0;
+  let runningSum = nums[left];
+  let output = []
+  while (left < nums.length) {
+    if (runningSum == targetSum) {
+      output.push(nums.slice(left, right + 1));
+      right++;
+      runningSum += nums[right];
+    } else if (Math.abs(runningSum) < Math.abs(targetSum)) {
+      right++;
+      runningSum += nums[right];
+    } else {
+      runningSum -= nums[left]
+      left++;
     }
-    return allArrs;
+  }
+  return output;
 }
+
+//yifan's solution
+// function findConsqSums(nums, targetSum) {
+//   let result = [], subArray = [], pointer = 0, runner=0, subArraySum = 0;
+//   while( pointer < nums.length){
+//       subArray = [];
+//       subArraySum = 0;
+//       while ( subArraySum <= Math.abs(targetSum) && runner < nums.length){
+//           subArraySum += nums[runner];
+//           subArray.push(nums[runner]);
+//           if(subArraySum === targetSum ){
+//               result.push(subArray);
+//               subArray = [...subArray];
+//           }
+//           runner ++;
+//       }
+//       pointer++;
+//       runner = pointer;
+//   }
+//   console.log(result);
+//   return result;
+// }
 
 console.log(findConsqSums(nums4, sum4))
